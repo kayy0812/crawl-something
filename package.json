@@ -1,0 +1,23 @@
+{
+  "name": "crawl-something",
+  "version": "1.0.0",
+  "description": "Crawl something from another website",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "pm2 start app.js --watch"
+  },
+  "keywords": [
+    "crawl"
+  ],
+  "author": "kayy0812",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^1.3.4",
+    "cheerio": "^1.0.0-rc.12",
+    "cloudflare-scraper": "^2.0.0",
+    "express": "^4.18.2",
+    "fs": "^0.0.1-security"
+  },
+  "type": "module"
+}
