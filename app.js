@@ -69,7 +69,7 @@ function crawlInfoFromAnimeHay(body) {
     }
 }
 
-app.listen(3000, function () {
-    console.log('Open site with port = 3000')
+app.listen(9999, function () {
+    console.log('Open site with port = 9999')
 })
 // console.log(data)
