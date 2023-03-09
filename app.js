@@ -1,6 +1,6 @@
 import express from "express"
-// import axios from "axios"
-import cloudflare from "cloudflare-scraper"
+import axios from "axios"
+// import cloudflare from "cloudflare-scraper"
 import * as cheerio from "cheerio"
 
 const app = express()
@@ -18,11 +18,15 @@ app.get("/get", function (req, res) {
 })
 
 async function getData(url) {
-    const resData = await cloudflare.get(url)
+    const resData = await axios.get(url, {
+        responseType: "text"
+    })
+
+    console.log(resData)
     if (validAnimeHay.test(url)) {
         return  {
-            server: resData.requestUrl.host,
-            data: crawlInfoFromAnimeHay(resData.body)
+            server: resData.request.host,
+            data: crawlInfoFromAnimeHay(resData.data)
         }
     } else {
         return {
