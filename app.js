@@ -21,38 +21,32 @@ app.get("/get", async function (req, res) {
 
 async function getData(url) {
     return new Promise((resolve, reject) => {
-        fetchData(url, function (res) {
-            var domain = regex.exec(res.request.res.responseUrl)[7]
-            var isEncoded = regex.exec(res.request.res.responseUrl)[2] !== undefined ? true : false
-
-            const decoder = new TextDecoder('ISO-8859-1')
-            let html = isEncoded ? decoder.decode(res.data) : res.data
-
-            switch (domain) {
+        fetchData(url).then((res) => {
+            switch (res.domain) {
                 case "animehay.pro":
                     resolve({
-                        server: domain,
-                        data: animeHay(html)
+                        server: res.domain,
+                        data: animeHay(res.html)
                     })
                     break
 
                 case "animevietsub.pro":
                     resolve({
-                        server: domain,
-                        data: animeVietSub(html)
+                        server: res.domain,
+                        data: animeVietSub(res.html)
                     })
                     break
 
                 case "vuighe.net":
                     resolve({
-                        server: domain,
-                        data: vuiGhe(html)
+                        server: res.domain,
+                        data: vuiGhe(res.html)
                     })
                     break
                 case "hhpanda.tv":
                     resolve({
-                        server: domain,
-                        data: hhPanda(html)
+                        server: res.domain,
+                        data: hhPanda(res.html)
                     })
                     break
 
@@ -66,13 +60,23 @@ async function getData(url) {
     })
 }
 
-function fetchData(url, callback) {
-    axios.get(url, {
-        responseType: "arraybuffer",
-        responseEncoding: "binary"
-    }).then(res => {
-        callback(res)
-    }).catch(e => fetchData(getGoogleCacheWebsite + url))
+function fetchData(url) {
+    return new Promise((resolve, reject) => {
+        axios.get(url, {
+            responseType: "arraybuffer",
+            responseEncoding: "binary"
+        }).then(res => {
+            var domain = regex.exec(res.request.res.responseUrl)[7]
+            var isEncoded = regex.exec(res.request.res.responseUrl)[2] !== undefined ? true : false
+
+            const decoder = new TextDecoder('ISO-8859-1')
+            var html = isEncoded ? decoder.decode(res.data) : res.data
+            resolve({
+                domain,
+                html
+            })
+        }).catch(reject)
+    })
 }
 
 app.listen(9999, function () {
